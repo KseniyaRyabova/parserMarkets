@@ -51,7 +51,6 @@ public class VimosParser {
             for (Map.Entry<String, String> entry : nomenclatureListWithPrice.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
-                System.out.println(nomenclatureOfOwner.indexOf(key));
                 if (nomenclature.equals(key)) {
                     try {
                         int cellNumber = 3;
@@ -60,7 +59,6 @@ public class VimosParser {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    System.out.println(nomenclature);
                 }
             }
         }
@@ -90,13 +88,6 @@ public class VimosParser {
         return "VimosParser{" +
                 "nomenclatureListWithPrice=" + nomenclatureListWithPrice +
                 "}\n";
-    }
-
-    public static void main(String[] args) {
-        VimosParser vimosParser = new VimosParser();
-        vimosParser.createCatalogList();
-        vimosParser.parseNomenclatureList();
-        vimosParser.parsePriceByListNomenclature();
     }
 
 }
