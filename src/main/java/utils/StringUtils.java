@@ -1,3 +1,5 @@
+package utils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,11 +10,11 @@ public class StringUtils {
     static String nomenclatureOfSite;
 
     public static ArrayList<String> splitStringIntoSubstrings(String nomenclatureOfOwner) {
-        return new ArrayList<>(Arrays.asList(replaceString(nomenclatureOfOwner).split("[ х]")));
+        return new ArrayList<>(Arrays.asList(replaceString(nomenclatureOfOwner).split("[ х*]")));
     }
 
     public static String replaceString(String replacementString) {
-        List<String> list = Arrays.asList("м", ",", "0", "-", ".", "на", "d");
+        List<String> list = Arrays.asList("м", ",", "-", ".", "0", "d", "(", ")", "Яч", "яч");
         for (String symbol : list) {
             replacementString = replacementString.replace(symbol, "");
         }
@@ -28,24 +30,23 @@ public class StringUtils {
     }
 
     /*Тесты в классе StringUtilsTest
-    * */
+     * */
     public static boolean nomenclatureIsExist(String nomOfOwner, String nomOfSite) {
         setOwnerNewString(nomOfOwner);
         setSiteNewString(nomOfSite);
         var substringsOwnerNom = splitStringIntoSubstrings(nomenclatureOfOwner);
         var substringsSiteNom = splitStringIntoSubstrings(nomenclatureOfSite);
         if (substringsOwnerNom.size() < substringsSiteNom.size()) {
-            ArrayList<String> wordListOwner = splitStringIntoSubstrings(nomenclatureOfOwner);
-            for (String word : wordListOwner) {
-                if (!nomenclatureOfSite.contains(word)) {
+            for (String word : substringsOwnerNom) {
+                if (!substringsSiteNom.contains(word)) {
                     return false;
                 }
             }
             return true;
         } else {
-            ArrayList<String> wordListSite = splitStringIntoSubstrings(nomenclatureOfSite);
-            for (String word : wordListSite) {
-                if (!nomenclatureOfOwner.contains(word)) {
+            System.out.println(substringsOwnerNom + " " + substringsSiteNom);
+            for (String word : substringsSiteNom) {
+                if (!substringsOwnerNom.contains(word)) {
                     return false;
                 }
             }
