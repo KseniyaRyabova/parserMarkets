@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import utils.StringUtils;
 
 @RunWith(Parameterized.class)
 public class StringUtilsTest {
@@ -15,7 +16,7 @@ public class StringUtilsTest {
         this.expected = expected;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "{0}")
     public static Object[][] getManePositive() {
         return new Object[][]{
                 {"Профилированный лист МП-20х1100 1800х1150 (RAL 6005 0,4) зеленый мох",
