@@ -9,11 +9,12 @@ import utils.StringUtils;
 import java.io.IOException;
 import java.util.*;
 
-public class VimosParser {
+import static utils.FileReaderAndWriter.nomenclatureOfOwner;
+
+public class VimosParser extends BaseParser{
     private String categoryUrl = "https://vimos.ru%s";
 
     private HashMap<String, String> nomenclatureListWithPrice = new HashMap<>();
-    private final List<String> nomenclatureOfOwner = FileReaderAndWriter.nomenclatureOfOwner;
 
     private final String priceXpath = "//a[contains(@title, '%s')]/parent::div[contains(@class,'product-card__content')]" +
             "//span[contains(@class,'product-card__price')]/strong";

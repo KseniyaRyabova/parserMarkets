@@ -5,7 +5,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,11 @@ public class FileReaderAndWriter {
     static String filename = System.getProperty("user.dir") + "\\src\\main\\resources\\nomenclatures.xlsx";
     public static final List<String> nomenclatureOfOwner = FileReaderAndWriter.getListOfNomenclature();
 
+    /**
+     * сделать алгоритм, который будет считывать / и собирать несколько мар для одного товара
+     *
+     * @throws IOException
+     */
 
     public static void removeOldValues() throws IOException {
         int i = 0;
@@ -54,27 +62,30 @@ public class FileReaderAndWriter {
         outputStream.close();
         fileInputStream.close();
     }
-/*
-    заполнение списка listOfNomenclature значениями номенклатур из файла
- */
+
+    /**
+     * заполнение списка listOfNomenclature значениями номенклатур из файла
+     */
     public static void setListOfNomenclature(String filename) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(filename);
         var workbook = new XSSFWorkbook(fileInputStream);
-        var sheetIterator = workbook.sheetIterator();
-        while (sheetIterator.hasNext()) {
-            Sheet sheet = sheetIterator.next();
-            var rowIterator = sheet.rowIterator();
-            while (rowIterator.hasNext()) {
-                Row row = rowIterator.next();
-                listOfNomenclature.add(row.getCell(1).toString());
-            }
+        Sheet sheet = workbook.getSheetAt(0);
+        System.out.println(sheet);
+        var rowIterator = sheet.rowIterator();
+        while (rowIterator.hasNext()) {
+            Row row = rowIterator.next();
+            System.out.println(row.getCell(1).toString());
+            listOfNomenclature.add(row.getCell(1).toString());
+
         }
         fileInputStream.close();
         listOfNomenclature.remove(0);
         System.out.println(listOfNomenclature);
     }
 
-    /* Получение списка номенклатур в виде ArrayList */
+    /**
+     * Получение списка номенклатур в виде ArrayList
+     */
     public static List<String> getListOfNomenclature() {
         try {
             setListOfNomenclature(filename);
@@ -85,10 +96,11 @@ public class FileReaderAndWriter {
     }
 
 
-    /* запись в файл цен в определенную ячейку определенного столбца.
-    cellNumber - final номер столбца для конкретного магазина;
-    rowNumber - строка таблицы в зависимости от определенной номенклатуры;
-    */
+    /**
+     * запись в файл цен в определенную ячейку определенного столбца.
+     * cellNumber - final номер столбца для конкретного магазина;
+     * rowNumber - строка таблицы в зависимости от определенной номенклатуры;
+     */
     public static void priceWriter(String priceValue, int cellNumber, int rowNumber) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(filename);
         var workbook = new XSSFWorkbook(fileInputStream);
