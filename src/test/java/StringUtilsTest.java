@@ -34,9 +34,9 @@ public class StringUtilsTest {
         };
     }
 
-    @Test
-    public void splitNomByWordWhenSplitExist() {
-        boolean actual = StringUtils.nomenclatureIsExist(nomenclatureOfOwner, nomenclatureOfSite);
-        Assert.assertEquals(String.format("\nстроки '%s' \nи '%s' выдают \nложно -положительный или -отрицательный результат", nomenclatureOfOwner, nomenclatureOfSite), expected, actual);
-    }
+//    @Test
+//    public void splitNomByWordWhenSplitExist() {
+//        boolean actual = StringUtils.nomenclatureIsExist(nomenclatureOfOwner, nomenclatureOfSite);
+//        Assert.assertEquals(String.format("\nстроки '%s' \nи '%s' выдают \nложно -положительный или -отрицательный результат", nomenclatureOfOwner, nomenclatureOfSite), expected, actual);
+//    }
 }

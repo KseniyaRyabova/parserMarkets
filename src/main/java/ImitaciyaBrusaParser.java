@@ -94,7 +94,10 @@ public class ImitaciyaBrusaParser extends BaseParser {
             for (Map.Entry<String, String> entry : nomenclatureListWithPrice.entrySet()) {
                 String siteNomenclature = entry.getKey();
                 String value = entry.getValue();
-                if (StringUtils.nomenclatureIsExist(ownerNomenclature, siteNomenclature)) {
+                var ownerNomenclatureWordList = StringUtils.splitStringIntoSubstrings(ownerNomenclature);
+                var siteNomenclatureWordList =  StringUtils.splitStringIntoSubstrings(siteNomenclature);
+                List <ArrayList> existNomenclatureList = new ArrayList<>();
+                if (StringUtils.nomenclatureIsExist(ownerNomenclatureWordList, siteNomenclatureWordList)) {
                     try {
                         int cellNumber = 4;
                         System.out.println("петрович: " + ownerNomenclature);

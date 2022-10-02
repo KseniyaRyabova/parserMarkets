@@ -19,12 +19,16 @@ public class VimosParser extends BaseParser{
     private final String priceXpath = "//a[contains(@title, '%s')]/parent::div[contains(@class,'product-card__content')]" +
             "//span[contains(@class,'product-card__price')]/strong";
 
-    private final ArrayList<String> categoriesList = new ArrayList<>(Arrays.asList("/catalog/profnastil-list-ocinkovannyy",
-            "/catalog/penopolistirol-ekstrudirovannyy", "/catalog/ondulin", "/catalog/setka-svarnaa", "/catalog/stolby-i-svai",
-            "/catalog/mineralnaa-vata","/catalog/mezhvencovyy-uteplitel"));
+//    private final ArrayList<String> categoriesList = new ArrayList<>(Arrays.asList("/catalog/profnastil-list-ocinkovannyy",
+//            "/catalog/penopolistirol-ekstrudirovannyy", "/catalog/ondulin", "/catalog/setka-svarnaa", "/catalog/stolby-i-svai",
+//            "/catalog/mineralnaa-vata","/catalog/mezhvencovyy-uteplitel", "/catalog/brus", "/catalog/brusok", "/catalog/vagonka",
+//            "catalog/doska"));
+
+    private final ArrayList<String> categoriesList = new ArrayList<>(Arrays.asList("/catalog/penopolistirol-ekstrudirovannyy"));
+
 
     //сбор цен и товаров по всему сайту в мапу nomenclatureListWithPrice
-    public void parseNomenclatureList() {
+    public void parse() {
         String nomenclatureTitle;
         String priceXpath;
         for (String categoryUrl : categoriesList) {
@@ -68,31 +72,36 @@ public class VimosParser extends BaseParser{
                 e.printStackTrace();
             }
         }
+        System.out.println("вимос: " + nomenclatureListWithPrice);
+        parsePriceByListNomenclature(3, nomenclatureListWithPrice);
     }
 
     // Запись в файл цены, если товар из списка товаров заказчика есть в мапе nomenclatureListWithPrice
-    public void parsePriceByListNomenclature() {
-        for (var ownerNomenclature : nomenclatureOfOwner) {
-            for (Map.Entry<String, String> entry : nomenclatureListWithPrice.entrySet()) {
-                String siteNomenclature = entry.getKey();
-                String value = entry.getValue();
-                System.out.println("заказчик: " + ownerNomenclature);
-                System.out.println("сайт: " + siteNomenclature);
-                System.out.println(StringUtils.nomenclatureIsExist(ownerNomenclature, siteNomenclature));
-                if (StringUtils.nomenclatureIsExist(ownerNomenclature, siteNomenclature)) {
-                    try {
-                        int cellNumber = 3;
-                        FileReaderAndWriter.priceWriter(value, cellNumber,
-                                nomenclatureOfOwner.indexOf(ownerNomenclature) + 1);
-                        break;
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
+//    public void parsePriceByListNomenclature() {
+//        for (var ownerNomenclature : nomenclatureOfOwner) {
+//            for (Map.Entry<String, String> entry : nomenclatureListWithPrice.entrySet()) {
+//                String siteNomenclature = entry.getKey();
+//                String value = entry.getValue();
+//                System.out.println("заказчик: " + ownerNomenclature);
+//                System.out.println("сайт: " + siteNomenclature);
+////                System.out.println(StringUtils.nomenclatureIsExist(ownerNomenclature, siteNomenclature));
+//                var ownerNomenclatureWordList = StringUtils.splitStringIntoSubstrings(ownerNomenclature);
+//                var siteNomenclatureWordList =  StringUtils.splitStringIntoSubstrings(siteNomenclature);
+//                List <ArrayList> existNomenclatureList = new ArrayList<>();
+//                if (StringUtils.nomenclatureIsExist(ownerNomenclatureWordList, siteNomenclatureWordList)) {
+//                    try {
+//                        int cellNumber = 3;
+//                        FileReaderAndWriter.priceWriter(value, cellNumber,
+//                                nomenclatureOfOwner.indexOf(ownerNomenclature) + 1);
+//                        break;
+//
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     /*
     Создание списка paths категорий магазина для дальнейшего парсинга

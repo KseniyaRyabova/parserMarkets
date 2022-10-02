@@ -17,12 +17,9 @@ public class BaseParser {
     private String priceXpath;
     private String attributeElement;
     private ArrayList<String> categoriesUrlList;
-//    private HashMap<String, String> nomenclatureAndPrice;
     private String searchUrlsXpath;
 
     public final List<String> nomenclatureOfOwner = FileReaderAndWriter.nomenclatureOfOwner;
-//    public HashMap<String, String> nomenclatureListWithPrice = new HashMap<>();
-
 
     public BaseParser(String categoryUrl, String priceXpath, String attributeElement) {
         this.categoryUrl = categoryUrl;
@@ -63,74 +60,52 @@ public class BaseParser {
         }
     }
 
-//    public HashMap<String, String> getNomenclatureAndPrice() {
-//        return nomenclatureAndPrice;
-//    }
-
-//    /**
-//     * Метод заполняется мапу ценами и товарами.
-//     *
-//     * @param nomenclatureAndPrice Сначала происходит поиск всех элементов с названием товара. Все наименования записываются в список.
-//     *                             Далее для каждого товара из списка происходит поиск цены.
-//     *                             Этот метод индивидуальный для каждого ресурса, тк у всех ресурсов разное наполнение.
-//     */
-//    public void setNomenclatureAndPrice(HashMap<String, String> nomenclatureAndPrice) {
-//        this.nomenclatureAndPrice = nomenclatureAndPrice;
-//        String nomenclatureTitle;
-//        String priceXpath;
-//        for (String categoryUrl : this.categoriesUrlList) {
-//            try {
-//                Document listNomenclatureOfCatalogUrl = Jsoup.connect(categoryUrl).get();
-//                Element bodyPage = listNomenclatureOfCatalogUrl.body();
-//                Elements nomenclatures = bodyPage.getElementsByAttribute("title");
-//                for (Element nomenclature : nomenclatures) {
-//                    String price = null;
-//                    nomenclatureTitle = nomenclature.attr("title");
-//                    priceXpath = String.format(this.priceXpath, nomenclatureTitle);
-//                    try {
-//                        price = bodyPage.selectXpath(priceXpath).text();
-//                        nomenclatureAndPrice.put(nomenclatureTitle, price);
-//                    } catch (Selector.SelectorParseException ex) {
-//                        ex.printStackTrace();
-//                    }
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-
     public void parsePriceByListNomenclature(int cellNumberForResource, HashMap <String, String> nomenclatureListWithPrice) {
         for (var ownerNomenclature : nomenclatureOfOwner) {
+            Map<List<String>, String> existNomenclatureListWithPrice = new HashMap<>();
             for (Map.Entry<String, String> entry : nomenclatureListWithPrice.entrySet()) {
                 String siteNomenclature = entry.getKey();
-                String value = entry.getValue();
-                if (StringUtils.nomenclatureIsExist(ownerNomenclature, siteNomenclature)) {
-                    try {
-                        FileReaderAndWriter.priceWriter(value, cellNumberForResource,
-                                nomenclatureOfOwner.indexOf(ownerNomenclature) + 1);
-                        System.out.println(nomenclatureOfOwner.indexOf(ownerNomenclature));
-                        break;
+                String priceValue = entry.getValue();
+                var ownerNomenclatureWordList = StringUtils.splitStringIntoSubstrings(ownerNomenclature);
+                var siteNomenclatureWordList = StringUtils.splitStringIntoSubstrings(siteNomenclature);
+                if (StringUtils.nomenclatureIsExist(ownerNomenclatureWordList, siteNomenclatureWordList)) {
+                    existNomenclatureListWithPrice.put(siteNomenclatureWordList, priceValue);
+                }
+            }
+            int minSize = 0;
+            for (Map.Entry<List<String>, String> entry : existNomenclatureListWithPrice.entrySet()) {
+                List<String> nomenclatureWords = entry.getKey();
+                if (minSize == 0) {
+                    minSize = nomenclatureWords.size();
+                } else if (minSize > nomenclatureWords.size()) {
+                    minSize = nomenclatureWords.size();
+                }
+            }
+            if (!existNomenclatureListWithPrice.isEmpty()) {
+                for (Map.Entry<List<String>, String> entry : existNomenclatureListWithPrice.entrySet()) {
+                    String price = entry.getValue();
+                    List<String> nomenclatureWords = entry.getKey();
+                    if (nomenclatureWords.size() == minSize) {
+                        try {
+                            System.out.println("петрович: " + ownerNomenclature);
+                            FileReaderAndWriter.priceWriter(price, cellNumberForResource,
+                                    nomenclatureOfOwner.indexOf(ownerNomenclature) + 1);
+                            break;
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }
+            } else {
+                try {
+                    FileReaderAndWriter.priceWriter("товар не найден", cellNumberForResource,
+                            nomenclatureOfOwner.indexOf(ownerNomenclature) + 1);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        String str = "//div[@class='gallery']//a";
-        String url = "http://imitaciya-brusa.ru/";
-        ArrayList<String> arrayList = new ArrayList<>();
-        BaseParser baseParser = new BaseParser();
-        HashMap<String, String> hm = new HashMap<>();
-        baseParser.setCategoryUrl(url);
-        baseParser.setSearchUrlsXpath(str);
-        baseParser.setCategoriesUrlList();
-        baseParser.getCategoriesUrlList();
-//        baseParser.setNomenclatureAndPrice(hm);
-
     }
 }

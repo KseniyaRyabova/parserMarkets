@@ -11,5 +11,8 @@ public class NomenclatureOfOwner {
     public void setMap() {
         nomenclatureOfOwner.put("Medera 20 Отбеливатель для древесины,для наружных и внутренних работ 5л.",
                 List.of("Антисептик отбеливатель MEDERA 20 5л конц. 1:2"));
+        nomenclatureOfOwner.put("", List.of());
+        nomenclatureOfOwner.put("", List.of());
+
     }
 }

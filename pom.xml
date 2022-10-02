@@ -58,6 +58,11 @@
             <version>6.6.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.1.1</version>
+        </dependency>
     </dependencies>
 
 </project>

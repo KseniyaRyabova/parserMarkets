@@ -6,10 +6,7 @@ import utils.FileReaderAndWriter;
 import utils.StringUtils;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SevlesSpbParser extends BaseParser{
 //    1. сбор категорий по урлу https://sevles-spb.ru/catalog/
@@ -59,7 +56,10 @@ public class SevlesSpbParser extends BaseParser{
             for (Map.Entry<String, String> entry : nomenclatureListWithPrice.entrySet()) {
                 String siteNomenclature = entry.getKey();
                 String value = entry.getValue();
-                if (StringUtils.nomenclatureIsExist(ownerNomenclature, siteNomenclature)) {
+                var ownerNomenclatureWordList = StringUtils.splitStringIntoSubstrings(ownerNomenclature);
+                var siteNomenclatureWordList =  StringUtils.splitStringIntoSubstrings(siteNomenclature);
+                List <ArrayList> existNomenclatureList = new ArrayList<>();
+                if (StringUtils.nomenclatureIsExist(ownerNomenclatureWordList, siteNomenclatureWordList)) {
                     try {
                         int cellNumber = 8;
                         System.out.println("петрович: " + ownerNomenclature);
